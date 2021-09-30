@@ -1,8 +1,8 @@
 import React from "react";
 import './App.css';
 
-function Potato(){
-    return <h1>I really don't like Potato!!!</h1>
+function PropsExample(props){
+    return <h1>I really don't like {props.food}!!!</h1>
 }
 function App() {
   return (
@@ -10,7 +10,9 @@ function App() {
         <h1>
           Hello, my first React project :)
         </h1>
-          <Potato />
+          <PropsExample food={"potato"}/>
+          <PropsExample food={"tomato"}/>
+          <PropsExample food={"everything"}/>
       </div>
   );
 }
