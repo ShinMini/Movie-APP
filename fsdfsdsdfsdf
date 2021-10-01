@@ -1,0 +1,40 @@
+[33mcommit ab82d959b1a78012d43b52f1d97018b6808ac209[m[33m ([m[1;36mHEAD -> [m[1;32msecond_branch[m[33m, [m[1;31morigin/second_branch[m[33m)[m
+Author: ShinMini <gusals121234@gmail.com>
+Date:   Fri Oct 1 17:12:55 2021 +0900
+
+    왜 푸쉬 안되냐
+
+[33mcommit cb2a1e656bb038b1cad348415e2659e3e870943f[m
+Author: ShinMini <gusals121234@gmail.com>
+Date:   Fri Oct 1 16:48:57 2021 +0900
+
+    Update App.js
+    
+    class and component practice example file
+
+[33mcommit a82a980ae5769f9d8413b89cb46ae05f57312935[m
+Merge: d2a8cd8 483e2ab
+Author: Shin__mini <77220824+ShinMini@users.noreply.github.com>
+Date:   Fri Oct 1 16:39:54 2021 +0900
+
+    Merge pull request #2 from ShinMini/master
+    
+    second_branch
+
+[33mcommit 483e2ab5e04a4653412d0a44004c01b800d09b02[m
+Author: ShinMini <gusals121234@gmail.com>
+Date:   Fri Oct 1 11:28:05 2021 +0900
+
+    learn about component using arrow function!
+
+[33mcommit 5d72c90840a49a2967223bc9d4a1c58ee13c5dc7[m
+Author: ShinMini <gusals121234@gmail.com>
+Date:   Thu Sep 30 21:42:09 2021 +0900
+
+    [21.09.30,21:42]just doing meaningless coding :)
+
+[33mcommit d2a8cd835a0775449143b615cba72502ebe51ce5[m
+Author: ShinMini <gusals121234@gmail.com>
+Date:   Thu Sep 30 21:02:32 2021 +0900
+
+    just practice some react example with git using
