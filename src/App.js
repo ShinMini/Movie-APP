@@ -1,18 +1,9 @@
 import React from "react";
-import './App.css';
 
-function Potato(){
-    return <h1>I really don't like Potato!!!</h1>
-}
-function App() {
-  return (
-      <div className={"container"}>
-        <h1>
-          Hello, my first React project :)
-        </h1>
-          <Potato />
-      </div>
-  );
+class App extends React.Component {
+    render(){
+        return <h1>I'm a class component!</h1>;
+    }
 }
 
 export default App;
