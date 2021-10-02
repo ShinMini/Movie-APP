@@ -6,10 +6,11 @@ class App extends React.Component {
     }
     state = {
         isLoading: true,
+        movies: [],
     };
-    componetntDidMount(){
+    componentDidMount(){
         setTimeout(() => {
-            this.setstate({ isLoading: false });
+            this.setState({ isLoading: false });
         }, 6000);
     }
     render(){
