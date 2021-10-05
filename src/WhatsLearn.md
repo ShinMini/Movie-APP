@@ -80,5 +80,67 @@ DOM소개, MDN</a>
 ###참고사항
 * `componentWillUnmount()`가 한번 수행될 경우, 다시 렌더링되지 않으므로, `componentWillUnmount()`내에서 **setState()** 를 호출하면 안된다. 컴포넌트 인스턴트가 마운트 해제되고 나면, 절대로 다시 마운트되지 않는다.
 ***
-
 참조: <a href = "https://ko.reactjs.org/docs/react-component.html">React 정식 홈페이지 문서</a>
+***
+# JavaScript, 비동기 처리, 콜백 함수, Promise_21.10.05
+### 공부해볼 내용
+* 자바스크립트가 비동기 처리를 하는 이유?
+* 비동기 처리를 유연하게 하기위한 콜백 함수.
+* Promise란?, Promise를 왜 사용해야 하는지?
+
+### 비동기 처리란?
+* 특정 코드의 연산이 끝날 때까지 코드의 실행을 멈추지 않고, 다음 코드를 먼저 실행
+<br> => 데이터를 요청한뒤, 받아올 때까지 기다려주지 않고, 바로 다음 코드 실행, 이처럼 특정 로직의 실행이 끝날  때까지 기다려주지 않고 나머지 코드를 실행하는 것이 비동기 처리이다.
+* ex) `setTimeout()`, `callbackFunc()` ..etc
+
+### 자바스크립트가 비동기 처리를 하는 이유
+* 만약 자바스크립트가 비동기처리를 하지 않고, 실행된 특정 코드가 모두 완료될 때까지 기다린 뒤 이어진 코드를 실행하는 방식이라면, 코드의 처리 시간이 길어짐에 따라, 이어진 코드의 실행이 지연돼 웹 구조의 전체 구현 시간이 길어질 수 있다.
+* 이러한 처리시간에 따른 웹 로딩 시간의 증가를 방지하고자, 자바스크립트는 코드의 처리시간에 비교적 영향을 덜 받을 수 있는 비동기 처리로 코드를 해석한다.
+
+### Promise란?
+* "A promise is an object that may produce a single value some time in the future"
+<br> => 자바스크립트 비동기 처리에 사용되는 객체
+
+### Promise의 3가지 상태(state)
+ * 이때, 상태(state)란 프로미스의 처리 과정을 의미한다.
+ * `new Promise()`로 프로미스가 생성되고 종료될 때까지 프로미스는 3가지 상태(state)를 갖는다.
+   * Pending(대기) : 비동기 처리 로직이 아직 완료되지 않은 상태
+   * Fulfilled(이행) : 비동기 처리가 완료되어 프로미스가 결과 값을 반환해준 상태
+   * Rejected(실패) : 비동기 처리가 실패하거나 오류가 발생한 상태
+***
+###`pending(대기)`
+아래와 같이 `new Promise()` 메서드를 호출하면 pending(대기)상태가 된다.
+  
+```ecmascript 6
+new Promise()
+```
+`new Promise()` 메서드를 호출할 때 콜백 함수를 선언할 수 있고, 콜백함수의 인자는 `resolve`, `reject`이다.
+```ecmascript 6
+new Promise(function(resolve, reject) {
+  // ...
+});
+```
+### Fulfilled(충족, 이행, 완료)
+여기서 콜백 함수의 인자 `resolve`를 아래와 같이 실행하면 이행(Fulfilled) 상태가 됩니다.
+```ecmascript 6
+new Promise(function(resolve, reject) {
+  resolve();
+});
+```
+그리고 이행 상태가 되며 아래와 같이 `then()`을 이용하여 처리 결과 값을 받을 수 있습니다.
+```ecmascript 6
+function getData() {
+  return new Promise(function(resolve, reject) {
+    var data = 100;
+    resolve(data);
+  });
+}
+
+// resolve()의 결과 값 data를 resolvedData로 받음
+getData().then(function(resolvedData) {
+  console.log(resolvedData); // 100
+});
+```
+# JavaScript, `async`와 `awit`
+
+
