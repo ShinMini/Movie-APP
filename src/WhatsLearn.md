@@ -1,8 +1,12 @@
+
 # What's Learn Today!
 * 오늘 공부한 내용을 기록하는 메모장
 * 21.10.04일 최초 생성
-
-# React `binding`이란?_[21.10.04]
+***
+***
+##[21.10.04]
+***
+# React `binding`이란?
 1. `this` 를 가리키는  Context를 변경하여 바로 실행시켜주는 메서드 
 => 메서드의 재사용과 공유, 그리고 "중복"을 방지할 수 있다.
 2. React 의 경우, 대부분 다른 `component`로 `pass`할 `method`만 `binding`하면 된다.
@@ -82,7 +86,11 @@ DOM소개, MDN</a>
 ***
 참조: <a href = "https://ko.reactjs.org/docs/react-component.html">React 정식 홈페이지 문서</a>
 ***
-# JavaScript, 비동기 처리, 콜백 함수, Promise_21.10.05
+
+***
+# [21.10.05]
+***
+# JavaScript, 비동기 처리, 콜백 함수, Promise
 ### 공부해볼 내용
 * 자바스크립트가 비동기 처리를 하는 이유?
 * 비동기 처리를 유연하게 하기위한 콜백 함수.
@@ -141,6 +149,150 @@ getData().then(function(resolvedData) {
   console.log(resolvedData); // 100
 });
 ```
+### Rejected(실패)
+`new Promise()`로 프로미스 객체를 생성하면 콜백 함수 인자로 `resolve`와 `reject`를 사용할 수 있다.
+여기서 `reject`를 아래와 같이 호출하면 실패(Rejected) 상태가 된다.
+
+```ecmascript 6
+new Promise(function(resolve, reject) {
+  reject();
+});
+```
+그리고, 실패 상태가 되면 실패한 이유(실패 처리의 결과 값)을 `catch()`로 받을 수 있습니다.
+```ecmascript 6
+function getData() {
+  return new Promise(function(resolve, reject) {
+    reject(new Error("Request is failed"));
+  });
+}
+
+// reject()의 결과 값 Error를 err에 받음
+getData().then().catch(function(err) {
+  console.log(err); // Error: Request is failed
+});
+```
+
+###Promise를 사용한 예제
+```ecmascript 6
+function getData() {
+  return new Promise(function(resolve, reject) {
+    $.get('url 주소/products/1', function(response) {
+      if (response) {   // response에 값이 있을경우, 값 저장
+        resolve(response);
+      }
+      reject(new Error("Request is failed"));   // 값이 없을 경우, error메시지 출력
+    });
+  });
+}
+
+// 위 $.get() 호출 결과에 따라 'response' 또는 'Error' 출력
+getData().then(function(data) {
+  console.log(data); // response 값 출력
+}).catch(function(err) {    // 에러 발생 원인 출력
+  console.error(err); // Error 출력
+});
+```
+위 코드는 서버에서 제대로 응답을 받아오면 resolve() 메서드를 호출하고, 응답이 없으면 reject() 메서드를 호출하는 예제입니다. 호출된 메서드에 따라 then()이나 catch()로 분기하여 응답 결과 또는 오류를 출력합니다.
+### 여러개의 Promise를 연결한 예시
+프로미스의 또 다른 특징은 여러 개의 프로미스를 연결하여 사용할 수 있다는 점이다. 앞 예제에서 `then()`
+메서드를 호출하고 나면 새로운 프로미스 객체가 반환된다. 따라서, 아래와 같은 코딩이 가능하다.
+
+```ecmascript 6
+new Promise(function(resolve, reject){
+  setTimeout(function() {
+    resolve(1);     // resolve()를 사용해 값 1 저장
+  }, 2000);     // 2초 후 resolve()를 호출
+})  // resolve()가 호출되면 프로미스가 대기 상태에서 이행 상태로 넘어가기 때문에 첫 번째 
+    // .then()의 로직으로 넘어감
+    
+.then(function(result) {    // then()을 사용해 resolve()에 저장되어 있던 값 호출
+  console.log(result); // 1 출력
+  return result + 10;   // result에 10을 더한 뒤, 그 다음 then()으로 넘겨줌
+})
+.then(function(result) {
+  console.log(result); // 11
+  return result + 20;
+})
+.then(function(result) {
+  console.log(result); // 31
+});
+```
+
+### 실무에서 있을법한 예제로 Promise 알아보기
+```ecmascript 6
+getData(userInfo)
+    .then(parseValue)
+    .then(auth)
+    .then(diaplay);
+```
+위 코드는 페이지에 입력된 사용자 정보를 받아와 파싱, 인증 등의 작업을 거치는 코드이다.
+여기서 userInfo는 사용자 정보가 담긴 객체를 의미하고, 
+parseValue, auth, display는 각각 프로미스를 반환해주는 함수라고 가정한다.
+
+```ecmascript 6
+var userInfo = {
+  id: 'test@abc.com',
+  pw: '****'
+};
+
+function parseValue() {
+  return new Promise({
+    // ...
+  });
+}
+function auth() {
+  return new Promise({
+    // ...
+  });
+}
+function display() {
+  return new Promise({
+    // ...
+  });
+}
+```
+이처럼 여러 개의 프로미스를 .then()으로 연결하여 처리할 수 있습니다.
+
+### Promise의 에러 처리 방법
+1. `then()`의 두 번째 인자로 에러를 처리하는 방법
+```ecmascript 6
+getData().then(
+  handleSuccess,
+  handleError
+);
+```
+
+2. `catch()`를 이용하는 방법
+```ecmascript 6
+getData().then().catch();
+```
+
+위 두가지 방법 모두 Promise의 `reject()`메서드가 호출되어 실패 상태가 된 경우에 실행된다. 
+<br> => 프로미스의 로직이 정상적으로 돌아가지 않는 경우 호출.
+####[예시]
+```ecmascript 6
+function getData() {
+  return new Promise(function(resolve, reject) {
+    reject('failed');
+  });
+}
+
+// 1. then()의 두 번째 인자로 에러를 처리하는 코드
+getData().then(function() {
+  // ...
+}, function(err) {
+  console.log(err);
+});
+
+// 2. catch()로 에러를 처리하는 코드
+getData().then().catch(function(err) {
+  console.log(err);
+});
+```
+#### 이때, `catch()`를 통한 예외 처리 방식이 더 많은 에러를 잡아낼 수 있으므로, 가급적 `catch()`를 사용하자!
+***
+<a href="https://joshua1988.github.io/web-development/javascript/promise-for-beginners/">[출처]Promise를 활용한 예제 및 참고자료</a>
+***
 # JavaScript, `async`와 `awit`
 
 
