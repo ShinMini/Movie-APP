@@ -294,6 +294,167 @@ getData().then().catch(function(err) {
 ***
 <a href="https://joshua1988.github.io/web-development/javascript/promise-for-beginners/">[출처]Promise를 활용한 예제 및 참고자료</a>
 ***
+
+> **[짤막지식]**
+> > **git bash** 에서` git add`, `git commit`, `git push` 순서로 진행해 줘야함.
+> > <br> **git bash** 에서 `git reset`을 활용해 이전 커밋을 삭제할 수 있다! (걱정마라)
+> > <br> **git bash** 에서 `git clone <path_name>`을 사용해 코드를 "merge" 하지 않고 가져올 수 있다.
+***
+
 # JavaScript, `async`와 `awit`
+***
+# JavaScript, `try...catch`
+##`try...catch`구문의 실행 방식
+> `try...catch` **ex)**
+>  ```ecmascript 6
+>  try {    // ...(1)
+>  console.log("에러가 없습니다.");    // ..(2)
+>  } 
+>  catch(err) {     // 변수 err는 사용자 지정 가능
+>  console.log("에러가 검출되었습니다.");    // ..(3)
+>  }
+>  ```
+* `try...catch`구문 실행 순서
+1. try 내부 코드 실행...(1)
+2. 에러가 검출되지 않을 경우, `try`안의 마지막 줄까지 실행되고, `catch`블럭은 건너 뜀...(2)
+3. 에러가 검출될 경우, `try` 코드 안 실행이 중단되고, `catch(err)`블록으로 제어 흐름이 넘어간다.
+<br>  **이때,** 변수 `err`은 무슨 에러가 일어났는지에 대한 설명이 담긴 에러 객체를 포함한다.
+
+***
+>**[짤막지식]**
+> > 자바스크립트 엔진이 코드를 읽는 중에 발생하는 에러를 'parse-time error' 라고 한다. (어디가서 아는척 하자!)
+***
+* `try...catch`구문은 유효한 코드에서 발생하는 에러만 처리할 수 있다. 
+<br> 이렇게 `try...catch`가 처리할 수 있는 에러를 **'런타임 에러(runtime-error)'** 또는 **'예외(exception)'** 라고 한다.
+***
+> **[짤막지식]** <br>
+>  ##### 동기 (synchronous: 동시에 일어나는)
+> > 요청과 동시에 결과가 주어져야 한다.(코드를 요청한 뒤 시간이 얼마가 걸리던 간에 요청한 자리에서 결과가 주어져야 한다.)
+> > <br> **설계가 간단하고 직관적이다. 하지만 결과가 주어질 때까지 대기하는 자원(시간)을 효율적으로 사용하지 못한다.**
+> 
+>  **비동기**(asynchronous: 동시에 일어나지 않는)
+> > 요청과 동시에 결과가 동시에 일어나지 않을거란 약속.
+> > <br> **동기 처리에 비해 설계가 복잡하다. 하지만 결과가 주어질 때까지 대기하지 않고 
+> 다른 작업을 수행할 수 있어 자원(시간)을 효율적으로 사용할 수 있다.**
+***
+
+##``try..catch``는 동기적으로 동작한다.
+`setTimeout`처럼 ‘스케줄 된(scheduled)’ 코드에서 발생한 예외는 ``try..catch``에서 잡아낼 수 없습니다.
+
+```ecmascript 6
+try {
+    setTimeout(function() {
+        noSuchVariable; // 스크립트는 여기서 죽습니다.
+    }, 1000);
+} catch (e) {
+    alert( "작동 멈춤" );
+}
+```
+`setTimeout`에 넘겨진 익명 함수는 엔진이 ``try..catch``를 떠난 다음에서야 실행되기 때문입니다.
+
+따라서, 스케줄 된 함수 내부의 예외를 잡으려면, ``try..catch``를 반드시 함수 내부에 구현해야 합니다.
+```ecmascript 6
+setTimeout(function() {
+        // 함수 내부에서 try catch구문을 통해 에러를 검출한뒤 내보내줌.
+    try {
+        noSuchVariable; // 이제 `try..catch`에서 에러를 핸들링 할 수 있습니다!
+    } catch {
+        alert( "에러를 잡았습니다!" );
+    }
+    
+}, 1000);
+```
+
+##에러 객체
+* 에러가 발생하면 자바스크립트는 에러 상세내용이 담긴 객체를 생성합니다. 
+* 그 후, catch 블록에 이 객체를 인수로 전달합니다.
+```ecmascript 6
+try {
+// ...
+} catch(err) { // <-- '에러 객체', err 대신 다른 이름으로도 쓸 수 있음
+// ...
+}
+```
+###내장 에러 전체와 에러 객체는 두 가지 주요 프로퍼티를 가집니다.
+
+* `name`
+  * 에러 이름. 정의되지 않은 변수 때문에 발생한 에러라면 `"ReferenceError"`가 이름이 됩니다.
+* `message`
+  * 에러 상세 내용을 담고 있는 문자 메시지
+  표준은 아니지만, <br>  `name`과 `message` 이외에 대부분의 호스트 환경에서 지원하는 프로퍼티도 있습니다.<br>
+  `stack`은 가장 널리 사용되는 비표준 프로퍼티 중 하나입니다.
+
+* `stack`
+  * 현재 호출 스택. 에러를 유발한 중첩 호출들의 순서 정보를 가진 문자열로 디버깅 목적으로 사용됩니다.
+  
+####[예시]
+```ecmascript 6
+try {
+    lalala; // 에러, 변수가 정의되지 않음!
+} catch(err) {
+    alert(err.name); // ReferenceError
+    alert(err.message); // lalala is not defined
+    alert(err.stack); // ReferenceError: lalala is not defined at ... (호출 스택)
+
+// 에러 전체를 보여줄 수도 있습니다.
+// 이때, 에러 객체는 "name: message" 형태의 문자열로 변환됩니다.
+    alert(err); // ReferenceError: lalala is not defined
+}
+```
+##`‘try…catch’` 사용하기
+* `try..catch` 실무에서 어떻게 사용되는지 알아봅시다.
+* JSON으로 인코딩된 값을 읽을 수 있도록 해주는 JSON.parse(str) 메서드는 
+<br>주로 서버 등에서 네트워크를 통해 전달받은 데이터를 디코딩하는 데 사용합니다.
+* 전달받은 데이터에 JSON.parse를 호출하는 식으로 사용되죠.
 
 
+```ecmascript 6
+
+let json = '{"name":"John", "age": 30}'; // 서버로부터 전달받은 데이터
+
+let user = JSON.parse(json); // 전달받은 문자열을 자바스크립트 객체로 변환
+
+// 문자열 형태로 전달받은 user가 프로퍼티를 가진 객체가 됨
+alert( user.name ); // John
+alert( user.age );  // 30
+```
+잘못된 형식의 `json`이 들어온 경우, `JSON.parse`는 에러를 만들기 때문에 스크립트가 **‘죽습니다’**. <br>
+서버에서 전달받은 데이터가 잘못되어 스크립트가 죽는 경우,  <br>
+사용자는 개발자 콘솔을 열지 않는 이상 절대 원인을 알 수 없습니다.  <br>
+그런데 사람들(고객)은 메시지 등을 통해 에러의 원인을 알지 못한 채 무언가가 '**그냥 죽는 것**'을 정말 싫어합니다. <br>
+
+###`try..catch`를 사용해 이를 처리해 봅시다.
+```ecmascript 6
+
+let json = "{ bad json }";
+
+try {
+    let user = JSON.parse(json); // <-- 여기서 에러가 발생하므로
+    alert( user.name ); // 이 코드는 동작하지 않습니다.
+} catch (e) {
+// 에러가 발생하면 제어 흐름이 catch 문으로 넘어옵니다.
+    alert( "데이터에 에러가 있어 재요청을 시도합니다." );
+    alert( e.name );
+    alert( e.message );
+}
+```
+위 예시에선 에러가 발생했다는 걸 보여주기 위해 간단히 **예외처리**했지만,  <br>
+catch 블록 안에서 새로운 네트워크 요청 보내기, 사용자에게 대안 제안하기,  <br>
+로깅 장치에 에러 정보 보내기 등과 같은 구체적인 일을 할 수 있습니다.  <br>
+스크립트가 죽도록 놔두는 것보다 훨씬 나은 대응이죠. <br>
+***
+###<a href ="https://ko.javascript.info/try-catch">출처: 'try..catch' 와 에러 핸들링</a>
+***
+
+
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
