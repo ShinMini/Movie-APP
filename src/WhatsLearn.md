@@ -442,11 +442,197 @@ try {
 catch 블록 안에서 새로운 네트워크 요청 보내기, 사용자에게 대안 제안하기,  <br>
 로깅 장치에 에러 정보 보내기 등과 같은 구체적인 일을 할 수 있습니다.  <br>
 스크립트가 죽도록 놔두는 것보다 훨씬 나은 대응이죠. <br>
+
+## `throw` 핸들링
+* `throw`연산자는 에러를 생성합니다.
+```ecamascript 6
+throw <error object>
+ ```
+* 이론적으로는 숫자, 문자열 같은 원시형 자료를 포함한 어떤 것이든 에러 객체(error object)로 사용할 수 있습니다.
+* 하지만 내장 에러와의 호환을 위해 되도록 에러 객체에 name과 message 프로퍼티를 넣어주는 것을 권장합니다.
+* 자바스크립트는 `Error`, `SyntaxError`, `ReferenceError`, `TypeError`등의 표준 에러 객체 관련 생성자를 지원합니다.
+* 이 생성자들을 이용해 에러 객체를 만들 수도 있습니다.
+```ecmascript 6
+let error = new Error(message);
+// or
+let error = new SyntaxError(message);
+let error = new ReferenceError(message);
+// ...
+```
+
+* 일반 객체가 아닌 내장 생성자를 사용해 만든 내장 에러 객체의 name 프로퍼티는 생성자 이름과 동일한 값을 갖습니다.
+* 프로퍼티 message의 값은 인수에서 가져옵니다.
+
+```ecmascript 6
+
+let error = new Error("이상한 일이 발생했습니다. o_O");
+
+alert(error.name); // Error
+alert(error.message); // 이상한 일이 발생했습니다. o_O
+// 잘못된 데이터를 받았을 때, JSON.parse가 어떤 종류의 에러를 만들어내는지 아래 코드를 통해 살펴봅시다.
+
+    try {
+    JSON.parse("{ 잘못된 형식의 json o_O }");
+} catch(e) {
+    alert(e.name); // SyntaxError
+    alert(e.message); // Unexpected token b in JSON at position 2
+}
+```
+* SyntaxError가 발생하네요.
+* 사용자를 나타내는 객체에 name 프로퍼티는 반드시 있어야 하므로, 
+* 이제 name이 없으면 에러가 발생한 것으로 간주하고 예외 처리해봅시다.
+* throw 연산자를 사용해 에러를 던져보겠습니다.
+```ecmascript 6
+
+let json = '{ "age": 30 }'; // 불완전한 데이터
+
+try {
+
+let user = JSON.parse(json); // <-- 에러 없음
+
+if (!user.name) {
+throw new SyntaxError("불완전한 데이터: 이름 없음"); // (*)
+}
+
+alert( user.name );
+
+} catch(e) {
+alert( "JSON Error: " + e.message ); // JSON Error: 불완전한 데이터: 이름 없음
+}
+```
+* (*)로 표시한 줄에서 throw 연산자는 message를 이용해 SyntaxError를 생성합니다. 
+* 에러 생성 방식은 자바스크립트가 자체적으로 에러를 생성하는 방식과 동일합니다. 
+* 에러가 발생했으므로 try의 실행은 즉시 중단되고 제어 흐름이 catch로 넘어간 것을 얼럿 창을 통해 확인할 수 있네요.
+* 이제 JSON.parse에서 에러가 발생한 경우를 포함해서 모든 에러를 catch 블록 안에서 처리할 수 있게 되었습니다.
+
+## 에러 다시 던지기
+* 위에선 '불완전한 데이터’를 다루려는 목적으로 try..catch를 썼습니다. 
+* 그런데 catch는 원래 try 블록에서 발생한 모든 에러를 잡으려는 목적으로 만들어졌습니다.
+* 그런데 위 예시에서 catch는 예상치 못한 에러를 잡아내 주긴 했지만, 에러 종류와 관계없이 "JSON Error" 메시지를 보여줍니다. 
+* 이렇게 에러 종류와 관계없이 동일한 방식으로 에러를 처리하는 것은 디버깅을 어렵게 만들기 때문에 좋지 않습니다.
+* 이런 문제를 피하고자 ‘다시 던지기(rethrowing)’ 기술을 사용합니다. 규칙은 간단합니다.
+* catch는 알고 있는 에러만 처리하고 나머지는 ‘다시 던져야’ 합니다.
+
+
+
+###‘다시 던지기’ 기술
+* catch가 모든 에러를 받습니다.
+* catch(err) {...} 블록 안에서 에러 객체 err를 분석합니다.
+* 에러 처리 방법을 알지 못하면 throw err를 합니다.
+* 보통 에러 타입을 instanceof 명령어로 체크합니다.
+```ecmascript 6
+try {
+    user = { /*...*/ };
+} catch(err) {
+    if (err instanceof ReferenceError) {
+        alert('ReferenceError'); //  정의되지 않은 변수에 접근하여 'ReferenceError' 발생
+    }
+}
+```
+####`err.name` 프로퍼티로 에러 클래스 이름을 알 수도 있습니다. 
+* 기본형 에러는 모두 `err.name` 프로퍼티를 가집니다. 또는 `err.constructor.name`를 사용할 수도 있습니다.
+
+* 에러를 다시 던져서 catch 블록에선 `SyntaxError`만 처리되도록 해보겠습니다.
+```ecmascript 6
+
+let json = '{ "age": 30 }'; // 불완전한 데이터
+try {
+
+    let user = JSON.parse(json);
+
+    if (!user.name) {
+        throw new SyntaxError("불완전한 데이터: 이름 없음");
+    }
+
+    blabla(); // 예상치 못한 에러
+
+    alert( user.name );
+
+} catch(e) {
+
+    if (e instanceof SyntaxError) {
+        alert( "JSON Error: " + e.message );
+    } else {
+        throw e; // 에러 다시 던지기 (*)
+    }
+
+}
+```
+* `catch` 블록 안의 (*)로 표시한 줄에서 다시 던져진(rethrow) 에러는 `try..catch` ‘밖으로 던져집니다’. 
+* 이때 바깥에 `try..catch`가 있다면 여기서 에러를 잡습니다. 아니라면 스크립트는 죽을 겁니다.
+
+* 이렇게 하면 `catch` 블록에선 어떻게 다룰지 알고 있는 에러만 처리하고, 알 수 없는 에러는 ‘건너뛸 수’ 있습니다.
+
+* 이제 `try..catch`를 하나 더 만들어, 다시 던져진 예상치 못한 에러를 처리해 보겠습니다.
+```ecmascript 6
+
+function readData() {
+    let json = '{ "age": 30 }';
+
+    try {
+// ...
+        blabla(); // 에러!
+    } catch (e) {
+// ...
+        if (!(e instanceof SyntaxError)) {
+            throw e; // 알 수 없는 에러 다시 던지기
+        }
+    }
+}
+
+try {
+    readData();
+} catch (e) {
+    alert( "External catch got: " + e ); // 에러를 잡음
+}
+```
+####`readData`는 `SyntaxError`만 처리할 수 있지만, 
+함수 바깥의 ``try..catch``에서는 예상치 못한 에러도 처리할 수 있게 되었습니다.
+
+##try…`catch`…finally
+###**잠깐! 에러 핸들링은 여기서 끝이 아닙니다.  <br>**
+`try..catch`는 `finally`라는 코드 절을 하나 더 가질 수 있습니다. <br>
+`finally`안의 코드는 다음과 같은 상황에서 실행됩니다. <br>
+
+* 에러가 없는 경우:` try` 실행이 끝난 후
+* 에러가 있는 경우: `catch` 실행이 끝난 후
+* `finally`를 사용하면 `try..catch`를 다음과 같이 확장할 수 있습니다.
+
+```ecmascript 6
+try {
+//... 코드를 실행 ...
+} catch(e) {
+//... 에러 핸들링 ...
+} finally {
+//... 항상 실행 ...
+}
+```
+
+### 응용 코드 예시
+
+```ecmascript 6
+try {
+alert( 'try 블록 시작' );
+if (confirm('에러를 만드시겠습니까?')) 이상한_코드();
+} catch (e) {
+alert( 'catch' );
+} finally {
+alert( 'finally' );     // 무조건 실행
+}
+```
+#### 위 코드는 두 가지 경로로 실행됩니다.
+
+* "에러를 만드시겠습니까?"에 
+* 'OK’로 답한 경우: `try` -> `catch` -> `finally`
+* 'No’로 답한 경우: `try` -> `finally`
+* `finally` 절은 무언가를 실행하고, 실행 결과에 상관없이 실행을 완료하고 싶을 경우 사용됩니다.
 ***
 ###<a href ="https://ko.javascript.info/try-catch">출처: 'try..catch' 와 에러 핸들링</a>
 ***
-
-
+> **[짤막지식]**
+>
+>JS의 `instanceof` 연산자는 생성자의 `prototype` 속성이 객체의 프로토타입 체인 어딘가 존재하는지 판별합니다.
+***
 
 
 <br>
