@@ -9,4 +9,4 @@
 - practice how to use git & react
 - want to use html canvas (by using computer graphics)
 
-<a herf ="src/WhatsLearn.md">Today's Learned</a>
+<a href ="src/WhatsLearn.md">Today's Learned</a>
