@@ -8,3 +8,5 @@
 - want to make movie viewer web
 - practice how to use git & react
 - want to use html canvas (by using computer graphics)
+
+check the learned file: <a href="src/WhatsLearn.md">link :) </a>
