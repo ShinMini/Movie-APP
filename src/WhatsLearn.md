@@ -900,6 +900,15 @@ fetch(url, options)
 * 응답(response) 객체로 부터는 HTTP 응답 상태(status), HTTP 응답 헤더(headers), HTTP 응답 전문(body) 등을 읽어올 수 있습니다.
 * 참고로 fetch() 함수는 엄밀히 말해, 브라우저의 window 객체에 소속되어 있기 때문에 window.fetch()로 사용되기도 합니다.
 ***
+> ###[짤막지식]
+> ### `axios`란?
+> `Axios`는 `브라우저`,` Node.js`를 위한 `Promise API`를 활용하는 HTTP **비동기 통신 라이브러리**이다
+> ### `fetch`와 `axios`의 차이점
+> 일종의 자바스크립트에 내장되어 있는 `fetch api`와 유사한 기능을 하지만 차이점이 몇가지 있다.
+>
+> `axios`는 별도의 설치가 필요하다는 단점이 있지만 
+> 
+> 그것을 커버할 만한 `fetch` 보다 많은 기능 지원과 문법이 조금이나마 간소화 된다는 장점이 있다.
 ***
 
 
