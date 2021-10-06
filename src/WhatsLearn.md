@@ -71,11 +71,11 @@
 ***
 ###3. `componentDidMount()`
 * `componentDidMount()`는 컴포넌트가 마운트된 직후, 즉 트리에 삽입된 직후 호출된다.
-    * DOM 노드가 있어야 하는 초기화 작업은 이 메서드에서 이뤄지면 된다. 외부에서 데이터를 불러와야 한다면, 네트워크 요청을 보내기 적절한 위치이다.
-    * 또한 구독을 설정하기에 좋은위치.(데이터 구독이 이뤄졌다면, `componentDidMount()`에서 구독 해제 작업을 반드시 수행할 것.)
+  * DOM 노드가 있어야 하는 초기화 작업은 이 메서드에서 이뤄지면 된다. 외부에서 데이터를 불러와야 한다면, 네트워크 요청을 보내기 적절한 위치이다.
+  * 또한 구독을 설정하기에 좋은위치.(데이터 구독이 이뤄졌다면, `componentDidMount()`에서 구독 해제 작업을 반드시 수행할 것.)
 * `componentDidMount()`에서 즉시 **setState()** 를 호출하는 경우, 이로인한 추가적인 렌더링이 발생하지만, 브라우저가 화면을 갱신하기 전에 이루어진다.
-    * 이때, `render()`가 두 번 호출되지만, 사용자는 그 중간 과정을 볼 수 없다.
-    * 이를 방지하기 위해, `constructor`메서드에서 초기 `state`를 할당할 수 있다. 하지만 모달(Modal) 또는 툴팁과 같이 렌더링에 앞아서 DOM 노드의 크기나 위치를 먼저 측정해야 하는 경우 이러한 방식이 필요할 수 있다.
+  * 이때, `render()`가 두 번 호출되지만, 사용자는 그 중간 과정을 볼 수 없다.
+  * 이를 방지하기 위해, `constructor`메서드에서 초기 `state`를 할당할 수 있다. 하지만 모달(Modal) 또는 툴팁과 같이 렌더링에 앞아서 DOM 노드의 크기나 위치를 먼저 측정해야 하는 경우 이러한 방식이 필요할 수 있다.
 
 ###4. `componentWillUnmount()`
 * `componentWillUnmount()`는 컴포넌트가 마운트 해제되어 제거되기 직전에 호출된다.
@@ -113,9 +113,9 @@
 ### Promise의 3가지 상태(state)
 * 이때, 상태(state)란 프로미스의 처리 과정을 의미한다.
 * `new Promise()`로 프로미스가 생성되고 종료될 때까지 프로미스는 3가지 상태(state)를 갖는다.
-    * Pending(대기) : 비동기 처리 로직이 아직 완료되지 않은 상태
-    * Fulfilled(이행) : 비동기 처리가 완료되어 프로미스가 결과 값을 반환해준 상태
-    * Rejected(실패) : 비동기 처리가 실패하거나 오류가 발생한 상태
+  * Pending(대기) : 비동기 처리 로직이 아직 완료되지 않은 상태
+  * Fulfilled(이행) : 비동기 처리가 완료되어 프로미스가 결과 값을 반환해준 상태
+  * Rejected(실패) : 비동기 처리가 실패하거나 오류가 발생한 상태
 ***
 ###`pending(대기)`
 아래와 같이 `new Promise()` 메서드를 호출하면 pending(대기)상태가 된다.
@@ -126,28 +126,28 @@ new Promise()
 `new Promise()` 메서드를 호출할 때 콜백 함수를 선언할 수 있고, 콜백함수의 인자는 `resolve`, `reject`이다.
 ```ecmascript 6
 new Promise(function(resolve, reject) {
-    // ...
+  // ...
 });
 ```
 ### Fulfilled(충족, 이행, 완료)
 여기서 콜백 함수의 인자 `resolve`를 아래와 같이 실행하면 이행(Fulfilled) 상태가 됩니다.
 ```ecmascript 6
 new Promise(function(resolve, reject) {
-    resolve();
+  resolve();
 });
 ```
 그리고 이행 상태가 되며 아래와 같이 `then()`을 이용하여 처리 결과 값을 받을 수 있습니다.
 ```ecmascript 6
 function getData() {
-    return new Promise(function(resolve, reject) {
-        var data = 100;
-        resolve(data);
-    });
+  return new Promise(function(resolve, reject) {
+    var data = 100;
+    resolve(data);
+  });
 }
 
 // resolve()의 결과 값 data를 resolvedData로 받음
 getData().then(function(resolvedData) {
-    console.log(resolvedData); // 100
+  console.log(resolvedData); // 100
 });
 ```
 ### Rejected(실패)
@@ -156,41 +156,41 @@ getData().then(function(resolvedData) {
 
 ```ecmascript 6
 new Promise(function(resolve, reject) {
-    reject();
+  reject();
 });
 ```
 그리고, 실패 상태가 되면 실패한 이유(실패 처리의 결과 값)을 `catch()`로 받을 수 있습니다.
 ```ecmascript 6
 function getData() {
-    return new Promise(function(resolve, reject) {
-        reject(new Error("Request is failed"));
-    });
+  return new Promise(function(resolve, reject) {
+    reject(new Error("Request is failed"));
+  });
 }
 
 // reject()의 결과 값 Error를 err에 받음
 getData().then().catch(function(err) {
-    console.log(err); // Error: Request is failed
+  console.log(err); // Error: Request is failed
 });
 ```
 
 ###Promise를 사용한 예제
 ```ecmascript 6
 function getData() {
-    return new Promise(function(resolve, reject) {
-        $.get('url 주소/products/1', function(response) {
-            if (response) {   // response에 값이 있을경우, 값 저장
-                resolve(response);
-            }
-            reject(new Error("Request is failed"));   // 값이 없을 경우, error메시지 출력
-        });
+  return new Promise(function(resolve, reject) {
+    $.get('url 주소/products/1', function(response) {
+      if (response) {   // response에 값이 있을경우, 값 저장
+        resolve(response);
+      }
+      reject(new Error("Request is failed"));   // 값이 없을 경우, error메시지 출력
     });
+  });
 }
 
 // 위 $.get() 호출 결과에 따라 'response' 또는 'Error' 출력
 getData().then(function(data) {
-    console.log(data); // response 값 출력
+  console.log(data); // response 값 출력
 }).catch(function(err) {    // 에러 발생 원인 출력
-    console.error(err); // Error 출력
+  console.error(err); // Error 출력
 });
 ```
 위 코드는 서버에서 제대로 응답을 받아오면 resolve() 메서드를 호출하고, 응답이 없으면 reject() 메서드를 호출하는 예제입니다. 호출된 메서드에 따라 then()이나 catch()로 분기하여 응답 결과 또는 오류를 출력합니다.
@@ -200,31 +200,31 @@ getData().then(function(data) {
 
 ```ecmascript 6
 new Promise(function(resolve, reject){
-    setTimeout(function() {
-        resolve(1);     // resolve()를 사용해 값 1 저장
-    }, 2000);     // 2초 후 resolve()를 호출
+  setTimeout(function() {
+    resolve(1);     // resolve()를 사용해 값 1 저장
+  }, 2000);     // 2초 후 resolve()를 호출
 })  // resolve()가 호출되면 프로미스가 대기 상태에서 이행 상태로 넘어가기 때문에 첫 번째 
-    // .then()의 로직으로 넘어감
+        // .then()의 로직으로 넘어감
 
-    .then(function(result) {    // then()을 사용해 resolve()에 저장되어 있던 값 호출
-        console.log(result); // 1 출력
-        return result + 10;   // result에 10을 더한 뒤, 그 다음 then()으로 넘겨줌
-    })
-    .then(function(result) {
-        console.log(result); // 11
-        return result + 20;
-    })
-    .then(function(result) {
-        console.log(result); // 31
-    });
+        .then(function(result) {    // then()을 사용해 resolve()에 저장되어 있던 값 호출
+          console.log(result); // 1 출력
+          return result + 10;   // result에 10을 더한 뒤, 그 다음 then()으로 넘겨줌
+        })
+        .then(function(result) {
+          console.log(result); // 11
+          return result + 20;
+        })
+        .then(function(result) {
+          console.log(result); // 31
+        });
 ```
 
 ### 실무에서 있을법한 예제로 Promise 알아보기
 ```ecmascript 6
 getData(userInfo)
-    .then(parseValue)
-    .then(auth)
-    .then(diaplay);
+        .then(parseValue)
+        .then(auth)
+        .then(diaplay);
 ```
 위 코드는 페이지에 입력된 사용자 정보를 받아와 파싱, 인증 등의 작업을 거치는 코드이다.
 여기서 userInfo는 사용자 정보가 담긴 객체를 의미하고,
@@ -232,24 +232,24 @@ parseValue, auth, display는 각각 프로미스를 반환해주는 함수라고
 
 ```ecmascript 6
 var userInfo = {
-    id: 'test@abc.com',
-    pw: '****'
+  id: 'test@abc.com',
+  pw: '****'
 };
 
 function parseValue() {
-    return new Promise({
-        // ...
-    });
+  return new Promise({
+    // ...
+  });
 }
 function auth() {
-    return new Promise({
-        // ...
-    });
+  return new Promise({
+    // ...
+  });
 }
 function display() {
-    return new Promise({
-        // ...
-    });
+  return new Promise({
+    // ...
+  });
 }
 ```
 이처럼 여러 개의 프로미스를 .then()으로 연결하여 처리할 수 있습니다.
@@ -258,8 +258,8 @@ function display() {
 1. `then()`의 두 번째 인자로 에러를 처리하는 방법
 ```ecmascript 6
 getData().then(
-    handleSuccess,
-    handleError
+        handleSuccess,
+        handleError
 );
 ```
 
@@ -273,21 +273,21 @@ getData().then().catch();
 ####[예시]
 ```ecmascript 6
 function getData() {
-    return new Promise(function(resolve, reject) {
-        reject('failed');
-    });
+  return new Promise(function(resolve, reject) {
+    reject('failed');
+  });
 }
 
 // 1. then()의 두 번째 인자로 에러를 처리하는 코드
 getData().then(function() {
-    // ...
+  // ...
 }, function(err) {
-    console.log(err);
+  console.log(err);
 });
 
 // 2. catch()로 에러를 처리하는 코드
 getData().then().catch(function(err) {
-    console.log(err);
+  console.log(err);
 });
 ```
 #### 이때, `catch()`를 통한 예외 처리 방식이 더 많은 에러를 잡아낼 수 있으므로, 가급적 `catch()`를 사용하자!
@@ -342,11 +342,11 @@ getData().then().catch(function(err) {
 
 ```ecmascript 6
 try {
-    setTimeout(function() {
-        noSuchVariable; // 스크립트는 여기서 죽습니다.
-    }, 1000);
+  setTimeout(function() {
+    noSuchVariable; // 스크립트는 여기서 죽습니다.
+  }, 1000);
 } catch (e) {
-    alert( "작동 멈춤" );
+  alert( "작동 멈춤" );
 }
 ```
 `setTimeout`에 넘겨진 익명 함수는 엔진이 ``try..catch``를 떠난 다음에서야 실행되기 때문입니다.
@@ -354,12 +354,12 @@ try {
 따라서, 스케줄 된 함수 내부의 예외를 잡으려면, ``try..catch``를 반드시 함수 내부에 구현해야 합니다.
 ```ecmascript 6
 setTimeout(function() {
-    // 함수 내부에서 try catch구문을 통해 에러를 검출한뒤 내보내줌.
-    try {
-        noSuchVariable; // 이제 `try..catch`에서 에러를 핸들링 할 수 있습니다!
-    } catch {
-        alert( "에러를 잡았습니다!" );
-    }
+  // 함수 내부에서 try catch구문을 통해 에러를 검출한뒤 내보내줌.
+  try {
+    noSuchVariable; // 이제 `try..catch`에서 에러를 핸들링 할 수 있습니다!
+  } catch {
+    alert( "에러를 잡았습니다!" );
+  }
 
 }, 1000);
 ```
@@ -377,27 +377,27 @@ try {
 ###내장 에러 전체와 에러 객체는 두 가지 주요 프로퍼티를 가집니다.
 
 * `name`
-    * 에러 이름. 정의되지 않은 변수 때문에 발생한 에러라면 `"ReferenceError"`가 이름이 됩니다.
+  * 에러 이름. 정의되지 않은 변수 때문에 발생한 에러라면 `"ReferenceError"`가 이름이 됩니다.
 * `message`
-    * 에러 상세 내용을 담고 있는 문자 메시지
-      표준은 아니지만, <br>  `name`과 `message` 이외에 대부분의 호스트 환경에서 지원하는 프로퍼티도 있습니다.<br>
-      `stack`은 가장 널리 사용되는 비표준 프로퍼티 중 하나입니다.
+  * 에러 상세 내용을 담고 있는 문자 메시지
+    표준은 아니지만, <br>  `name`과 `message` 이외에 대부분의 호스트 환경에서 지원하는 프로퍼티도 있습니다.<br>
+    `stack`은 가장 널리 사용되는 비표준 프로퍼티 중 하나입니다.
 
 * `stack`
-    * 현재 호출 스택. 에러를 유발한 중첩 호출들의 순서 정보를 가진 문자열로 디버깅 목적으로 사용됩니다.
+  * 현재 호출 스택. 에러를 유발한 중첩 호출들의 순서 정보를 가진 문자열로 디버깅 목적으로 사용됩니다.
 
 ####[예시]
 ```ecmascript 6
 try {
-    lalala; // 에러, 변수가 정의되지 않음!
+  lalala; // 에러, 변수가 정의되지 않음!
 } catch(err) {
-    alert(err.name); // ReferenceError
-    alert(err.message); // lalala is not defined
-    alert(err.stack); // ReferenceError: lalala is not defined at ... (호출 스택)
+  alert(err.name); // ReferenceError
+  alert(err.message); // lalala is not defined
+  alert(err.stack); // ReferenceError: lalala is not defined at ... (호출 스택)
 
 // 에러 전체를 보여줄 수도 있습니다.
 // 이때, 에러 객체는 "name: message" 형태의 문자열로 변환됩니다.
-    alert(err); // ReferenceError: lalala is not defined
+  alert(err); // ReferenceError: lalala is not defined
 }
 ```
 ##`‘try…catch’` 사용하기
@@ -428,13 +428,13 @@ alert( user.age );  // 30
 let json = "{ bad json }";
 
 try {
-    let user = JSON.parse(json); // <-- 여기서 에러가 발생하므로
-    alert( user.name ); // 이 코드는 동작하지 않습니다.
+  let user = JSON.parse(json); // <-- 여기서 에러가 발생하므로
+  alert( user.name ); // 이 코드는 동작하지 않습니다.
 } catch (e) {
 // 에러가 발생하면 제어 흐름이 catch 문으로 넘어옵니다.
-    alert( "데이터에 에러가 있어 재요청을 시도합니다." );
-    alert( e.name );
-    alert( e.message );
+  alert( "데이터에 에러가 있어 재요청을 시도합니다." );
+  alert( e.name );
+  alert( e.message );
 }
 ```
 위 예시에선 에러가 발생했다는 걸 보여주기 위해 간단히 **예외처리**했지만,  <br>
@@ -471,10 +471,10 @@ alert(error.message); // 이상한 일이 발생했습니다. o_O
 // 잘못된 데이터를 받았을 때, JSON.parse가 어떤 종류의 에러를 만들어내는지 아래 코드를 통해 살펴봅시다.
 
 try {
-    JSON.parse("{ 잘못된 형식의 json o_O }");
+  JSON.parse("{ 잘못된 형식의 json o_O }");
 } catch(e) {
-    alert(e.name); // SyntaxError
-    alert(e.message); // Unexpected token b in JSON at position 2
+  alert(e.name); // SyntaxError
+  alert(e.message); // Unexpected token b in JSON at position 2
 }
 ```
 * SyntaxError가 발생하네요.
@@ -487,16 +487,16 @@ let json = '{ "age": 30 }'; // 불완전한 데이터
 
 try {
 
-    let user = JSON.parse(json); // <-- 에러 없음
+  let user = JSON.parse(json); // <-- 에러 없음
 
-    if (!user.name) {
-        throw new SyntaxError("불완전한 데이터: 이름 없음"); // (*)
-    }
+  if (!user.name) {
+    throw new SyntaxError("불완전한 데이터: 이름 없음"); // (*)
+  }
 
-    alert( user.name );
+  alert( user.name );
 
 } catch(e) {
-    alert( "JSON Error: " + e.message ); // JSON Error: 불완전한 데이터: 이름 없음
+  alert( "JSON Error: " + e.message ); // JSON Error: 불완전한 데이터: 이름 없음
 }
 ```
 * (*)로 표시한 줄에서 throw 연산자는 message를 이용해 SyntaxError를 생성합니다.
@@ -521,11 +521,11 @@ try {
 * 보통 에러 타입을 instanceof 명령어로 체크합니다.
 ```ecmascript 6
 try {
-    user = { /*...*/ };
+  user = { /*...*/ };
 } catch(err) {
-    if (err instanceof ReferenceError) {
-        alert('ReferenceError'); //  정의되지 않은 변수에 접근하여 'ReferenceError' 발생
-    }
+  if (err instanceof ReferenceError) {
+    alert('ReferenceError'); //  정의되지 않은 변수에 접근하여 'ReferenceError' 발생
+  }
 }
 ```
 ####`err.name` 프로퍼티로 에러 클래스 이름을 알 수도 있습니다.
@@ -537,23 +537,23 @@ try {
 let json = '{ "age": 30 }'; // 불완전한 데이터
 try {
 
-    let user = JSON.parse(json);
+  let user = JSON.parse(json);
 
-    if (!user.name) {
-        throw new SyntaxError("불완전한 데이터: 이름 없음");
-    }
+  if (!user.name) {
+    throw new SyntaxError("불완전한 데이터: 이름 없음");
+  }
 
-    blabla(); // 예상치 못한 에러
+  blabla(); // 예상치 못한 에러
 
-    alert( user.name );
+  alert( user.name );
 
 } catch(e) {
 
-    if (e instanceof SyntaxError) {
-        alert( "JSON Error: " + e.message );
-    } else {
-        throw e; // 에러 다시 던지기 (*)
-    }
+  if (e instanceof SyntaxError) {
+    alert( "JSON Error: " + e.message );
+  } else {
+    throw e; // 에러 다시 던지기 (*)
+  }
 
 }
 ```
@@ -566,23 +566,23 @@ try {
 ```ecmascript 6
 
 function readData() {
-    let json = '{ "age": 30 }';
+  let json = '{ "age": 30 }';
 
-    try {
+  try {
 // ...
-        blabla(); // 에러!
-    } catch (e) {
+    blabla(); // 에러!
+  } catch (e) {
 // ...
-        if (!(e instanceof SyntaxError)) {
-            throw e; // 알 수 없는 에러 다시 던지기
-        }
+    if (!(e instanceof SyntaxError)) {
+      throw e; // 알 수 없는 에러 다시 던지기
     }
+  }
 }
 
 try {
-    readData();
+  readData();
 } catch (e) {
-    alert( "External catch got: " + e ); // 에러를 잡음
+  alert( "External catch got: " + e ); // 에러를 잡음
 }
 ```
 ####`readData`는 `SyntaxError`만 처리할 수 있지만,
@@ -611,12 +611,12 @@ try {
 
 ```ecmascript 6
 try {
-    alert( 'try 블록 시작' );
-    if (confirm('에러를 만드시겠습니까?')) 이상한_코드();
+  alert( 'try 블록 시작' );
+  if (confirm('에러를 만드시겠습니까?')) 이상한_코드();
 } catch (e) {
-    alert( 'catch' );
+  alert( 'catch' );
 } finally {
-    alert( 'finally' );     // 무조건 실행
+  alert( 'finally' );     // 무조건 실행
 }
 ```
 #### 위 코드는 두 가지 경로로 실행됩니다.
@@ -650,11 +650,11 @@ try {
 ```ecmascript 6
 
 var user = {
-    id: 1,
-    name: 'Josh'
+  id: 1,
+  name: 'Josh'
 };
 if (user.id === 1) {
-    console.log(user.name); // Josh
+  console.log(user.name); // Josh
 }
 ```
 
@@ -667,7 +667,7 @@ if (user.id === 1) {
 
 var user = fetchUser('domain.com/users/1');
 if (user.id === 1) {
-    console.log(user.name);
+  console.log(user.name);
 }
 ```
 
@@ -680,10 +680,10 @@ if (user.id === 1) {
 * 먼저 앞에서 살펴본 코드를 logName()이라는 간단한 함수로 감싸보겠습니다.
 ```ecmascript 6
 function logName() {
-    var user = fetchUser('domain.com/users/1');
-    if (user.id === 1) {
-        console.log(user.name);
-    }
+  var user = fetchUser('domain.com/users/1');
+  if (user.id === 1) {
+    console.log(user.name);
+  }
 }
 ```
 
@@ -692,10 +692,10 @@ function logName() {
 ```ecmascript 6
 // 뭐가 바뀌었나, 안경쓰고 1분동안 처다봄;;
 async function logName() {
-    var user =  await fetchUser('domain.com/users/1');
-    if (user.id === 1) {
-        console.log(user.name);
-    }
+  var user =  await fetchUser('domain.com/users/1');
+  if (user.id === 1) {
+    console.log(user.name);
+  }
 }
 ```
 * 짜잔. 이게 바로 `async` `await` 코드입니다. 혹시 아직 이해가 정확히 안 가더라도 걱정 마세요. 지금부터 차근히 살펴볼게요! :)
@@ -704,10 +704,10 @@ async function logName() {
 * 자 저희가 조금 전에 본 코드가 대체 어떤 의미인지 한번 알아보겠습니다. 먼저 아까 살펴봤던 logName() 함수 코드를 다시 보겠습니다.
 ```ecmascript 6
 function logName() {
-    var user = fetchUser('domain.com/users/1');
-    if (user.id === 1) {
-        console.log(user.name);
-    }
+  var user = fetchUser('domain.com/users/1');
+  if (user.id === 1) {
+    console.log(user.name);
+  }
 }
 ```
 * 여기서 `fetchUser()`라고 하는 코드는 서버에서 데이터를 받아오는 HTTP 통신 코드라고 가정했습니다.
@@ -716,11 +716,11 @@ function logName() {
 
 function logName() {
 // 아래의 user 변수는 위의 코드와 비교하기 위해 일부러 남겨놓았습니다.
-    var user = fetchUser('domain.com/users/1', function(user) {
-        if (user.id === 1) {
-            console.log(user.name);
-        }
-    });
+  var user = fetchUser('domain.com/users/1', function(user) {
+    if (user.id === 1) {
+      console.log(user.name);
+    }
+  });
 }
 ```
 
@@ -732,10 +732,10 @@ function logName() {
 ```ecmascript 6
 // 비동기 처리를 콜백으로 안해도 된다면..
 function logName() {
-    var user = fetchUser('domain.com/users/1');
-    if (user.id === 1) {
-        console.log(user.name);
-    }
+  var user = fetchUser('domain.com/users/1');
+  if (user.id === 1) {
+    console.log(user.name);
+  }
 }
 ```
 
@@ -745,10 +745,10 @@ function logName() {
 ```ecmascript 6
 // async & await 적용 후
 async function logName() {
-    var user = await fetchUser('domain.com/users/1');
-    if (user.id === 1) {
-        console.log(user.name);
-    }
+  var user = await fetchUser('domain.com/users/1');
+  if (user.id === 1) {
+    console.log(user.name);
+  }
 }
 ```
 
@@ -757,11 +757,11 @@ async function logName() {
 
 ```ecmascript 6
 async function 함수명() {
-    await 비동기_처리_메서드_명();
+  await 비동기_처리_메서드_명();
 }
 ```
 
-* 먼저 함수의 앞에 `async` 라는 예약어를 붙입니다. 
+* 먼저 함수의 앞에 `async` 라는 예약어를 붙입니다.
 * 그러고 나서 함수의 내부 로직 중 HTTP 통신을 하는 비동기 처리 코드 앞에 `await`를 붙입니다.
 * 여기서 주의하셔야 할 점은 비동기 처리 메서드가 꼭 프로미스 객체를 반환해야 `await`가 의도한 대로 동작합니다.
 * 일반적으로` await`의 대상이 되는 비동기 처리 코드는 Axios 등 프로미스를 반환하는 API 호출 함수입니다.
@@ -771,24 +771,24 @@ async function 함수명() {
 
 ```ecmascript 6
 function fetchItems() {
-    return new Promise(function(resolve, reject) {
-        var items = [1,2,3];
-        resolve(items)
-    });
+  return new Promise(function(resolve, reject) {
+    var items = [1,2,3];
+    resolve(items)
+  });
 }
 
 async function logItems() {
-    var resultItems = await fetchItems();
-    console.log(resultItems); // [1,2,3]
+  var resultItems = await fetchItems();
+  console.log(resultItems); // [1,2,3]
 }
 ```
 
 
-* 먼저 `fetchItems()` 함수는 **프로미스 객체를 반환하는 함수**입니다. 프로미스는 “**자바스크립트 비동기 처리를 위한 객체**“라고 배웠었죠. 
+* 먼저 `fetchItems()` 함수는 **프로미스 객체를 반환하는 함수**입니다. 프로미스는 “**자바스크립트 비동기 처리를 위한 객체**“라고 배웠었죠.
 * `fetchItems()` 함수를 실행하면 프로미스가 **이행(Resolved)** 되며 결과 값은 `items` 배열이 됩니다.
 
-* 그리고 이제 `logItems()` 함수를 보겠습니다. 
-* `logItems()` 함수를 실행하면 `fetchItems()` 함수의 결과 값인 `items` 배열이 `resultItems` 변수에 담깁니다. 
+* 그리고 이제 `logItems()` 함수를 보겠습니다.
+* `logItems()` 함수를 실행하면 `fetchItems()` 함수의 결과 값인 `items` 배열이 `resultItems` 변수에 담깁니다.
 * 따라서, 콘솔에는 [1,2,3]이 출력되죠.
 
 * `await`를 사용하지 않았다면 데이터를 받아온 시점에 콘솔을 출력할 수 있게 콜백 함수나 .
@@ -799,41 +799,41 @@ async function logItems() {
 ```ecmascript 6
 // HTTP 통신 동작을 모방한 코드
 function fetchItems() {
-    return new Promise(function(resolve, reject) {
-        setTimeout(function() {
-            var items = [1,2,3];
-            resolve(items)
-        }, 3000);
-    });
+  return new Promise(function(resolve, reject) {
+    setTimeout(function() {
+      var items = [1,2,3];
+      resolve(items)
+    }, 3000);
+  });
 }
 
 // jQuery ajax 코드
 function fetchItems() {
-    return new Promise(function(resolve, reject) {
-        $.ajax('domain.com/items', function(response) {
-            resolve(response);
-        });
+  return new Promise(function(resolve, reject) {
+    $.ajax('domain.com/items', function(response) {
+      resolve(response);
     });
+  });
 }
 ```
 
 ## `async` & `await` 실용 예제
-* `async` & `await` 문법이 가장 빛을 발하는 순간은 여러 개의 비동기 처리 코드를 다룰 때입니다. 
+* `async` & `await` 문법이 가장 빛을 발하는 순간은 여러 개의 비동기 처리 코드를 다룰 때입니다.
 * 아래와 같이 각각 사용자와 할 일 목록을 받아오는 HTTP 통신 코드가 있다고 하겠습니다.
 
 ```ecmascript 6
     function fetchUser() {
-    var url = 'https://jsonplaceholder.typicode.com/users/1'
-    return fetch(url).then(function(response) {     // then()을 사용해, resolved(이행)된 함수를 가져옴
-        return response.json();
-    });
+  var url = 'https://jsonplaceholder.typicode.com/users/1'
+  return fetch(url).then(function(response) {     // then()을 사용해, resolved(이행)된 함수를 가져옴
+    return response.json();
+  });
 }
 
 function fetchTodo() {
-    var url = 'https://jsonplaceholder.typicode.com/todos/1';
-    return fetch(url).then(function(response) {
-        return response.json();
-    });
+  var url = 'https://jsonplaceholder.typicode.com/todos/1';
+  return fetch(url).then(function(response) {
+    return response.json();
+  });
 }
 ```
 
@@ -843,29 +843,64 @@ function fetchTodo() {
 * `fetchUser()`를 이용하여 사용자 정보 호출
 * 받아온 사용자 아이디가 1이면 할 일 정보 호출
 * 받아온 할 일 정보의 제목을 콘솔에 출력
+```ecmascript 6
+async function logTodoTitle() {
+  var user = await fetchUser();
+  if (user.id === 1) {
+    var todo = await fetchTodo();
+    console.log(todo.title); // delectus aut autem
+  }
+}
+```
+
+`* logTodoTitle()`를 실행하면 콘솔에 `delectus aut autem`가 출력될 것입니다. 
+* 위 비동기 처리 코드를 만약 콜백이나 프로미스로 했다면 훨씬 더 코드가 길어졌을 것이고 인덴팅 뿐만 아니라 가독성도 좋지 않았을 겁니다. 
+* 이처럼 `async` `await` 문법을 이용하면 기존의 비동기 처리 코드 방식으로 사고하지 않아도 되는 장점이 생깁니다.
+
+
+## `async` & `await` 예외 처리
+* `async` & `await`에서 예외를 처리하는 방법은 바로 try `catch`입니다. 
+* 프로미스에서 에러 처리를 위해 `.catch()`를 사용했던 것처럼 `async`에서는 `catch {}` 를 사용하시면 됩니다.
+
+* 조금 전 코드에 바로 `try catch` 문법을 적용해보겠습니다.
+```ecmascript 6
+async function logTodoTitle() {
+  try {
+    var user = await fetchUser();
+    if (user.id === 1) {
+      var todo = await fetchTodo();
+      console.log(todo.title); // delectus aut autem
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+```
+* 위의 코드를 실행하다가 발생한 네트워크 통신 오류뿐만 아니라 간단한 타입 오류 등의 일반적인 오류까지도 `catch`로 잡아낼 수 있습니다. 
+* 발견된 에러는 `error` 객체에 담기기 때문에 에러의 유형에 맞게 에러 코드를 처리해주시면 됩니다.
 
 ***
-> ###[짤막지식]     
+
+***
+> ###[짤막지식]
 > ### `fetch`란?
 > 원격 `API`를 간편하게 호출할 수 있도록 브라우저에서 제공하는 함수이다.
 > ### `fetch` 사용법
-> fetch() 함수는 첫번째 인자로 URL, 두번째 인자로 옵션 객체를 받고, Promise 타입의 객체를 반환합니다. <br> 
+> fetch() 함수는 첫번째 인자로 URL, 두번째 인자로 옵션 객체를 받고, Promise 타입의 객체를 반환합니다. <br>
 > 반환된 객체는, API 호출이 성공했을 경우에는 응답(response) 객체를 `resolve`하고, <br>
 > 실패했을 경우에는 예외(error) 객체를 `reject`합니다.
 
 ```ecmascript 6
 fetch(url, options)
-   .then((response) => console.log("response:", response))
-   .catch((error) => console.log("error:", error));
+        .then((response) => console.log("response:", response))
+        .catch((error) => console.log("error:", error));
 ``` 
 
 * 옵션(options) 객체에는 HTTP 방식(method), HTTP 요청 헤더(headers), HTTP 요청 전문(body) 등을 설정해줄 수 있습니다.
 * 응답(response) 객체로 부터는 HTTP 응답 상태(status), HTTP 응답 헤더(headers), HTTP 응답 전문(body) 등을 읽어올 수 있습니다.
 * 참고로 fetch() 함수는 엄밀히 말해, 브라우저의 window 객체에 소속되어 있기 때문에 window.fetch()로 사용되기도 합니다.
 ***
-
-
-
+***
 
 
 
