@@ -9,4 +9,7 @@
 - practice how to use git & react
 - want to use html canvas (by using computer graphics)
 
-check the learned file: <a href="src/WhatsLearn.md">link :) </a>
+
+##<a href="src/SummaryL.md">learned summary</a>
+
+##<a href="src/WhatsLearn.md">check the total learned</a>
