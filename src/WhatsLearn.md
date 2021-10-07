@@ -1,10 +1,50 @@
-# What's Learn Today!
-* 오늘 공부한 내용을 기록하는 메모장
-***
-***
-##[21.10.04]
-***
-# React `binding`이란?
+## What's Learn Today _오늘 공부한 내용
+
+
+### `map()` 함수
+* `map()` 함수는 각 배열의 요소를 돌면서 인자로 전달된 함수를 사용하여 처리 된 새로운 결과를 
+  <br> 배열에 담아 반환하는 함수입니다.
+* ex]
+```ecmascript 6
+const numbers = [1, 2, 3, 4, 5];
+const result = numbers.map((num) => num * 2);
+console.log(result);    // result = [2, 4, 6, 8, 10]
+```
+### `map()`함수를 사용한 응용 예제
+
+```ecmascript 6
+import {Component} from "react";
+
+class Mycomponent extends Component {
+  render() {
+    const menus = ["Menu1", "Menu2", "Menu3", "Menu4"]  // menus 배열에 map()으로 불러올 값 저장
+    // menus.map 을 사용해 처리된 새로운 결과`(<li>{menu}</li>)`를 menuList 배열에 담아 반환
+    const menuList = menus.map((menu) => (<li>{menu}</li>));    
+
+    return(
+            <ul>
+              {menuList}
+            </ul>
+    )
+  };
+}
+```
+### key 설정
+* 리엑트(React)에서는 컴포넌트를 렌더링 하였을 때 어떤 원소가 변경되었는지 빠르게 감지하기 `key`가 사용됩니다.
+* 만약 `key`가 설정되지 않았다면 가상 DOM을 순차적으로 비교하면서 감지하기 때문에 `key`가 없을 때보다 속도가 느립니다.
+* 이러한 `key` 값은 `map()`함수를 호출할 때 인자로 넘기는 `Callback`함수의 인자로 넘어오는 `index`값을 사용하면 됩니다.
+
+```ecmascript 6
+    // ...
+    //  const menuList = menus.map((menu) => (<li>{menu}</li>));   
+    // => index를 key값으로 설정
+    const menuList = menus.map((menu, index) => (<li>{menu}</li>));
+    // ...
+```
+
+
+---
+# React `binding`이란? _[21.10.04]
 1. `this` 를 가리키는  Context를 변경하여 바로 실행시켜주는 메서드
    => 메서드의 재사용과 공유, 그리고 "중복"을 방지할 수 있다.
 2. React 의 경우, 대부분 다른 `component`로 `pass`할 `method`만 `binding`하면 된다.
