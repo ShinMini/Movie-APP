@@ -10,6 +10,6 @@
 - want to use html canvas (by using computer graphics)
 
 
-##<a href="src/SummaryL.md">learned summary</a>
+## <a href="src/SummaryL.md">learned summary</a>
 
-##<a href="src/WhatsLearn.md">check the total learned</a>
+## <a href="src/WhatsLearn.md">check the total learned</a>
