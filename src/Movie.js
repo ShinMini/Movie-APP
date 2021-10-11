@@ -1,8 +1,12 @@
 import React from "react";
 import PropTypes from 'prop-types';
 
-function Moive({id, title, year, summary, poster}) {
-    return <h4>{title}</h4>;
+function Movie({id, title, year, summary, poster}) {
+    return (
+        <h4>
+            {title}
+        </h4>
+    );
 }
 
 Movie.propTypes = {
